@@ -8,13 +8,15 @@ public class test_script_01 : MonoBehaviour
     int direction = 1;
     public float jump_height = 10;
     bool can_jump = true;
-    public float dash_speed = 1000;
+    public float dash_speed = 10;
     bool can_dash = true;
     float dash_timer;
     private Rigidbody2D rigid_body;
     private BoxCollider2D player_collider;
     public PhysicsMaterial2D character_material;
     [SerializeField] private LayerMask platform;
+    public Animator animator;
+
 
 
     void Awake()
@@ -40,14 +42,18 @@ public class test_script_01 : MonoBehaviour
 
         //left and right movement
         if ((Input.GetKey (KeyCode.D) && Input.GetKey (KeyCode.A)) || (!Input.GetKey (KeyCode.D) && !Input.GetKey (KeyCode.A))){
-            
+            animator.SetBool("Walking",false);
         }else if (Input.GetKey (KeyCode.A)) {  
+            animator.SetBool("Walking",true);
             direction = -1;
             rigid_body.velocity = new Vector2(direction * move_speed, rigid_body.velocity.y);
-        }else if (Input.GetKey (KeyCode.D)) {  
+        }else if (Input.GetKey (KeyCode.D)) {
+            animator.SetBool("Walking",true);  
             direction = 1;
             rigid_body.velocity = new Vector2(direction * move_speed, rigid_body.velocity.y);
         }        
+        
+        transform.rotation = Quaternion.Euler(0, (Mathf.Acos(direction) * (180/Mathf.PI)) ,0);
         
         //jumping
         if ((Input.GetKey (KeyCode.W) || Input.GetKey (KeyCode.Space)) && can_jump) {  
