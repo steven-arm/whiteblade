@@ -41,17 +41,20 @@ public class test_script_01 : MonoBehaviour
     {   
 
         //left and right movement
-        if ((Input.GetKey (KeyCode.D) && Input.GetKey (KeyCode.A)) || (!Input.GetKey (KeyCode.D) && !Input.GetKey (KeyCode.A))){
-            animator.SetBool("Walking",false);
-        }else if (Input.GetKey (KeyCode.A)) {  
-            animator.SetBool("Walking",true);
+        if (Input.GetKey (KeyCode.A)) {
+            animator.ResetTrigger("Idle");
+            animator.SetTrigger("Walking");
             direction = -1;
             rigid_body.velocity = new Vector2(direction * move_speed, rigid_body.velocity.y);
         }else if (Input.GetKey (KeyCode.D)) {
-            animator.SetBool("Walking",true);  
+            animator.ResetTrigger("Idle");
+            animator.SetTrigger("Walking");  
             direction = 1;
             rigid_body.velocity = new Vector2(direction * move_speed, rigid_body.velocity.y);
-        }        
+        }else if ((Input.GetKey (KeyCode.D) && Input.GetKey (KeyCode.A)) || (!Input.GetKey (KeyCode.D) && !Input.GetKey (KeyCode.A))){
+            animator.ResetTrigger("Walking");
+            animator.SetTrigger("Idle"); 
+        }   
         
         transform.rotation = Quaternion.Euler(0, (Mathf.Acos(direction) * (180/Mathf.PI)) ,0);
         
